@@ -63,15 +63,13 @@ var off = function(){ /*...*/ };
 // Adding methods to classes
 var Car = function(loc){
 	var obj = {loc: loc};
-	extend(obj, methods);
+	extend(obj, Car.methods);
 	return obj;
 };
-var methods = {
+Car.methods = {
 	move	: function(){
 		this.loc++;
-	},
-	on		: function(){ /*...*/ },
-	off		: function(){ /*...*/ }
+	}
 };
 
 
