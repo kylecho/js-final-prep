@@ -100,3 +100,67 @@ function ABCheck(str) {
   }
   return false;
 }
+
+// Palindrome (Difficulty **)
+=========================================================================
+function Palindrome(str) {
+	// remove any white spaces in the string, join into a string, and finally turn into an array
+  var myStr = str.split(' ').join('').split('');
+  var myStrReversed = myStr.slice().reverse();
+  for (var i = 0; i < myStr.length; i++) {
+    if (myStr[i] !== myStrReversed[i]) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// Arith Geo (Difficulty ***) It should test for all elements!
+=========================================================================
+function ArithGeo(arr) {
+  var result = -1;
+
+  var isArithmetic = function(arr) {
+  	for (var i = arr.length - 1; i >= 2; i--) {
+      if (arr[i] - arr[i-1] !== arr[i-1] - arr[i-2]) {
+        return result;
+      }
+    }
+    result = 'Arithmetic';
+  };
+
+  var isGeometric = function(arr) {
+  	for (var i = arr.length - 1; i >= 2; i--) {
+      if (arr[i] / arr[i-1] !== arr[i-1] / arr[i-2]) {
+        return result;
+      }
+    }
+    result = 'Geometric';
+  };
+
+  isArithmetic(arr);
+  isGeometric(arr);
+  return result;
+}
+
+// Array Addition I (Difficulty *****)
+// If a problem involves a combination, it's always the recursion!
+=========================================================================
+function ArrayAdditionI(arr) {
+	var largest = arr.sort(function(a, b){ return a - b; }).pop();
+	
+	var recursion = function recursion(target, array) {
+		if (array.length === 0) {
+			return target === 0;
+		} else {
+			var n = array[0];
+			// In every recursion, the array is reduced by 1
+			array = array.slice(1);
+			// However, target is either reduced by 'n' or not, in which case it's skipped.
+			return recursion(target, array) || recursion(target - n, array);
+		}
+	};
+
+	// Note that the recursion is returned.
+	return recursion(largest, arr);
+}
