@@ -164,3 +164,85 @@ function ArrayAdditionI(arr) {
 	// Note that the recursion is returned.
 	return recursion(largest, arr);
 }
+
+// Letter Count I (Difficulty ****)
+=========================================================================
+function LetterCountI(str) {
+  
+  // Compare function should be carefully set up.
+  var compare = function(a, b) {
+      if (a < b) {
+          return -1;
+      } else if (a > b) {
+          return 1;
+      } else {
+          return 0;
+      }
+  };
+  
+  var copy = str.split(' ').slice();
+  var myArr = copy.slice();
+  var max = 0;   // Must be initiated with 0
+  var count = 0; // Must be initiated with 0
+  var theIndex;
+  var word;
+
+  for (var i = 0; i < myArr.length; i++) {
+    word = myArr[i].split('').sort(compare);
+    for (var j = 0; j < word.length - 1; j++) {
+      if (word[j] === word[j + 1]) {
+        count++;
+      }
+    }
+    if (count > max) {
+      max = count;
+      theIndex = i;
+      count = 0;
+    }
+  }
+  
+  return (theIndex !== undefined) ? copy[theIndex] : -1;
+}
+
+// Second GreatLow (Difficulty ***) Not hard, but learn the technique used for unique.
+=========================================================================
+function SecondGreatLow(arr) {
+	var unique = [arr[0]];
+	// Using indexOf() to determine unique elements
+	for (var i = 0; i < arr.length; i++) {
+		if (unique.indexOf(arr[i]) === -1) {
+			unique.push(arr[i]);
+		}
+	}
+	// Check if all elements are identical just in case!
+	if (arr.every(function(element){ return element === arr[0]; })) {
+    unique.push(arr[0]);
+  }
+	
+	unique.sort(function(a, b){ return a - b; });
+	var smallest = unique[1].toString();
+	// Reverse the array to find the largest
+	unique.reverse();
+	var largest = unique[1].toString();
+	return smallest + ' ' + largest;
+
+}
+
+// Division Stringified (Difficulty ***)
+=========================================================================
+function DivisionStringified(num1, num2) {
+	var num = Math.round(num1 / num2).toString().split('');
+	var index = -3;
+	while (num.length + index > 0) {
+		num.splice(index, 0, ',');
+		index -= 4;
+	}
+
+	return num.join('');
+}
+
+// Note what negative index works on splice.
+var num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+num.splice(-1, 0, ','); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, ',', 10 ]
+num.splice(-2, 0, ','); // [ 1, 2, 3, 4, 5, 6, 7, 8, ',', 9, 10 ]
+num.splice(-3, 0, ','); // [ 1, 2, 3, 4, 5, 6, 7, ',', 8, 9, 10 ]
