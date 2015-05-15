@@ -1,4 +1,4 @@
-// Letter Changes (Difficulty ****)
+// 1. Letter Changes (Difficulty ****) Utilize indexOf()
 =========================================================================
 function LetterChanges(str) {
   var alpha = 'abcdefghijklmnopqrstuvwxyz';
@@ -29,7 +29,7 @@ function LetterChanges(str) {
 }
 
 
-// Letter Capitalize (Difficulty **)
+// 2. Letter Capitalize (Difficulty **)
 =========================================================================
 function LetterCapitalize(str) {
   var myStr = str.toLowerCase().split(' ');
@@ -46,7 +46,7 @@ function LetterCapitalize(str) {
 }
 
 
-// Simple Symbols (Difficulty **)
+// 3. Simple Symbols (Difficulty **)
 =========================================================================
 function SimpleSymbols(str) {
   var alpha = 'abcdefghijklmnopqrstuvwxyz';
@@ -60,7 +60,7 @@ function SimpleSymbols(str) {
 }
 
 
-// Time Convert (Difficulty *) Read carefully for sample cases!
+// 4. Time Convert (Difficulty *) Read carefully for sample cases!
 =========================================================================
 function TimeConvert(num) {
 	var mins = num % 60;
@@ -69,7 +69,7 @@ function TimeConvert(num) {
 }
 
 
-// Alphabet Soup (Difficulty *) But the sorting can be tricky
+// 5. Alphabet Soup (Difficulty *) But the sorting can be tricky
 =========================================================================
 function AlphabetSoup(str) {
   var myStr = str.split('');
@@ -88,7 +88,7 @@ function AlphabetSoup(str) {
 }
 
 
-// AB Check (Difficulty ***) Because I'm not familiar with String indexing
+// 6. AB Check (Difficulty ***) Because I'm not familiar with String indexing
 =========================================================================
 function ABCheck(str) {
   for (var i = 0; i < str.length; i++) { // String has a .length method
@@ -101,7 +101,7 @@ function ABCheck(str) {
   return false;
 }
 
-// Palindrome (Difficulty **)
+// 7. Palindrome (Difficulty **)
 =========================================================================
 function Palindrome(str) {
 	// remove any white spaces in the string, join into a string, and finally turn into an array
@@ -115,7 +115,7 @@ function Palindrome(str) {
   return true;
 }
 
-// Arith Geo (Difficulty ***) It should test for all elements!
+// 8. Arith Geo (Difficulty ***) It should test for all elements!
 =========================================================================
 function ArithGeo(arr) {
   var result = -1;
@@ -143,7 +143,7 @@ function ArithGeo(arr) {
   return result;
 }
 
-// Array Addition I (Difficulty *****)
+// 9. Array Addition I (Difficulty *****)
 // If a problem involves a combination, it's always the recursion!
 =========================================================================
 function ArrayAdditionI(arr) {
@@ -165,7 +165,7 @@ function ArrayAdditionI(arr) {
 	return recursion(largest, arr);
 }
 
-// Letter Count I (Difficulty ****)
+// 10. Letter Count I (Difficulty ****)
 =========================================================================
 function LetterCountI(str) {
   
@@ -204,7 +204,7 @@ function LetterCountI(str) {
   return (theIndex !== undefined) ? copy[theIndex] : -1;
 }
 
-// Second GreatLow (Difficulty ***) Not hard, but learn the technique used for unique.
+// 11. Second GreatLow (Difficulty ***) For finding unique elements from an array, use indexOf() and push unique elements.
 =========================================================================
 function SecondGreatLow(arr) {
 	var unique = [arr[0]];
@@ -228,7 +228,7 @@ function SecondGreatLow(arr) {
 
 }
 
-// Division Stringified (Difficulty ***)
+// 12. Division Stringified (Difficulty ***) For text formatting, use .splice() with negative starting indexes.
 =========================================================================
 function DivisionStringified(num1, num2) {
 	var num = Math.round(num1 / num2).toString().split('');
@@ -246,3 +246,179 @@ var num = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 num.splice(-1, 0, ','); // [ 1, 2, 3, 4, 5, 6, 7, 8, 9, ',', 10 ]
 num.splice(-2, 0, ','); // [ 1, 2, 3, 4, 5, 6, 7, 8, ',', 9, 10 ]
 num.splice(-3, 0, ','); // [ 1, 2, 3, 4, 5, 6, 7, ',', 8, 9, 10 ]
+
+
+// 13. Counting Minutes I (Difficulty *****) It's a problem of its kind. Great insight for string & number
+=========================================================================
+function CountingMinutesI(str) {
+
+	var toMinutes = function(timeStr) {  // "1:01am"
+		var ampm = timeStr.slice(-2);		   // "am"
+		timeStr = timeStr.slice(0, -2);	   // "1:01"
+		var hourNmin = timeStr.split(':'); // ["1", "01"]
+		if (hourNmin[0] === 12) {
+			hourNmin[0] = 0;
+		}
+		hourNmin[1] = hourNmin[1] * 1; 		 // converts "01" to 1
+		return hourNmin[0] * 60 + hourNmin[1] + (ampm === 'pm' ? 12 * 60 : 0);
+	};
+
+	var times = str.split('-');
+	var time1 = toMinutes(times[0]);
+	var time2 = toMinutes(times[1]);
+	if (time2 <= time1) {
+		time2 += 60 * 24;
+	}
+
+	return time2 - time1;
+}
+
+// 14. Mean Mode (Difficulty ****) For finding mode, use an object to store as a key : value pair.
+=========================================================================
+function MeanMode(arr) {
+  var modeCount = {};
+  var mode;
+  var mean;
+  var sum = 0;
+  var count = 0;
+  
+  for ( var i = 0; i < arr.length; i++ ) {
+    sum += arr[i];
+    modeCount[arr[i]] = modeCount[arr[i]] || 0;
+    modeCount[arr[i]] += 1;          //adding for the count of the number
+  }
+  mean = sum/arr.length;
+  for( var key in modeCount ){
+    if( modeCount[key] > count){     //**check the number of times a number has been seen
+      mode = parseInt(key);          //if its a new highest, convert the key back into a number and set it as the current mode
+      count = modeCount[key];        //set a new high count
+    }
+  }
+
+  return mode === mean ? 1 : 0;      //check to see if the mode and mean are equal
+}
+
+// 15. Dash Insert (Difficulty ***) Note how to treat on checking odd indexes
+=========================================================================
+function DashInsert(num) {
+	var num = num.toString().split('');
+	var result = [];
+	for (var i = 0; i < num.length; i++) {
+		result.push(num[i]);
+		if (num[i] % 2 !== 0 && num[i+1] % 2 === 1) { // For the last i, it becomes (undefined % 2 === 1) which is (NaN === 1) that's 'false'.
+			result.push('-');														// But if we used (num[i+1] % 2 !== 0), it means (undefined % 2 !== 0) which is (NaN !== 0) that's 'true'.
+		}																							// It will add '-' to the end of the last index.
+	}
+	return result.join('');
+}
+
+
+// 16. Swap Case (Difficulty *) For case swaping, use alpha[alpha.indexOf(myStr[i])] to append for the answer.
+=========================================================================
+function SwapCase(str) {
+  var upper = 'abcdefghijklmnopqrstuvwxyz';
+  var lower = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+  var myStr = str.split('');
+  var result = '';
+  for (var i = 0; i < myStr.length; i++) {
+    if (upper.indexOf(myStr[i]) !== -1) {
+      result += lower[upper.indexOf(myStr[i])];
+    } else if (lower.indexOf(myStr[i]) !== -1) {
+      result += upper[lower.indexOf(myStr[i])];
+    } else {
+      result += myStr[i];
+    }
+  }
+  return result;
+}
+
+// 17. Number Addition (Difficulty *) When dealing with numbers in a string, always think of 'str.match(/[0-9]+/g);'
+=========================================================================
+function NumberAddition(str) {
+  var num = str.match(/[0-9]+/g); // Useful
+  return num.reduce(function(a, b){ return parseInt(a) + parseInt(b); });
+}
+
+// 18. Third Greatest (Difficulty **) Don't make it complicated. When comparing, always think about sort().
+=========================================================================
+function ThirdGreatest(strArr) {
+  var myArr = strArr.slice(); // make a copy
+  myArr.sort(function(a, b){ return b.length - a.length; });
+  return myArr[2];
+}
+
+// 19. Powers of Two (Difficulty *)
+=========================================================================
+function PowersofTwo(num) {
+  if (num < 2) {
+    return false;
+  } else if (num === 2) {
+    return true;
+  } else {
+    return PowersofTwo(num / 2);
+  }
+}
+
+// 20. Additive Persistence (Difficulty ***)
+=========================================================================
+function AdditivePersistence(num) {
+  var count = 0;
+
+  var reduceToSingleNum = function recursion(num) {
+  	var myNum = num.toString();
+    if (myNum.length === 1) {
+      return true;
+    } else {
+    	count++;
+      myNum = myNum.split('');
+      myNum = myNum.reduce(function(a, b) { return parseInt(a) + parseInt(b); });
+    } return recursion(myNum);
+  };
+
+  reduceToSingleNum(num);
+  return count;
+}
+
+// 21. Multiplicative Persistence (Difficulty ***) No loop needed
+=========================================================================
+function MultiplicativePersistence(num) {
+  var count = 0;
+
+  var reduceToSingleNum = function recursion(num) {
+    var myNum = num.toString();
+    if (myNum.length === 1) {
+      return true;
+    } else {
+      count++;
+      myNum = myNum.split('');
+      myNum = myNum.reduce(function(a, b) { return parseInt(a) * parseInt(b); });
+    } return recursion(myNum);
+  };
+
+  reduceToSingleNum(num);
+  return count;
+}
+
+// 22. Off Line Minimum (Difficulty ****)
+=========================================================================
+function OffLineMinimum(strArr) {
+  // loop through strArr
+  // if strArr[i] equals 'E'
+  // copy an array left the the 'E'
+  // sort, and pick 0 index element
+  // push to result
+  // remove the 'E' and the index of the pushed element 
+  var myArr = strArr.slice();
+  var tempArr;
+  var result = [];
+  for (var i = 0; i < myArr.length; i++) {
+    if (myArr[i] === 'E') {
+      tempArr = myArr.slice(0, i + 1).sort(function(a, b){ return parseInt(a) - parseInt(b); });
+      result.push(tempArr[0]);
+      myArr.splice(i, 1); // remove 'E'
+      myArr.splice(myArr.indexOf(tempArr[0]), 1); // remove 'the num'
+      i = i - 2;
+    }
+  }
+  return result.join(',');
+}
