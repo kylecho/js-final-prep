@@ -1,4 +1,4 @@
-// Each (Difficulty **)
+// 1. Each (Difficulty **)
 =========================================================================
 var each = function(list, iteratee) {
 	if (Array.isArray(list)) {
@@ -12,7 +12,7 @@ var each = function(list, iteratee) {
 	}
 };
 
-// Map (Difficulty *) Note that iteratee takes 3 parameters: element, index, list
+// 2. Map (Difficulty *) Note that iteratee takes 3 parameters: element, index, list
 =========================================================================
 var map = function(list, iteratee) {
 	var result = [];
@@ -24,7 +24,7 @@ var map = function(list, iteratee) {
 	return result;
 };
 
-// Reduce (Difficulty *****) Two things: a flag, and memo inside _.each with if-else statement.
+// 3. Reduce (Difficulty *****) Two things: a flag, and memo inside _.each with if-else statement.
 =========================================================================
 var reduce = function(list, iteratee, memo){  
   var memoUndefined = arguments.length < 3; // trigger
@@ -58,7 +58,7 @@ var reduceRight = function(list, iteratee, memo) {
 	return memo;
 };
 
-// Find (Difficulty ****) Beware of my final return statement. Each doesn't return anything.
+// 4. Find (Difficulty ****) Beware of my final return statement. Each doesn't return anything.
 =========================================================================
 var find = function(list, predicate) {
 	var found;
@@ -72,7 +72,7 @@ var find = function(list, predicate) {
 	return found;
 };
 
-// Filter (Difficulty *)
+// 5. Filter (Difficulty *)
 =========================================================================
 var filter = function(list, predicate) {
 	var result = [];
@@ -86,7 +86,7 @@ var filter = function(list, predicate) {
 	return result;
 };
 
-// Reject (Difficulty *) Just an opposite of Filter.
+// 6. Reject (Difficulty *) Just an opposite of Filter.
 =========================================================================
 var reject = function(list, predicate) {
 	var result = [];
@@ -100,7 +100,7 @@ var reject = function(list, predicate) {
 	return result;
 };
 
-// Every (Difficulty **) Note where true should be located.
+// 7. Every (Difficulty **) Note where true should be located.
 =========================================================================
 var every = function(list, predicate) {
 	var result = true;
@@ -114,7 +114,7 @@ var every = function(list, predicate) {
 	return result;
 };
 
-// Some (Difficulty **) Just an opposite of Every.
+// 8. Some (Difficulty **) Just an opposite of Every.
 =========================================================================
 var some = function(list, predicate) {
 	var result = false;
@@ -128,7 +128,7 @@ var some = function(list, predicate) {
 	return result;
 };
 
-// Contains (Difficulty *)
+// 9. Contains (Difficulty *)
 =========================================================================
 var contains = function(list, value) {
 	var result = false;
@@ -142,7 +142,7 @@ var contains = function(list, value) {
 	return result;
 };
 
-// Invoke (Difficulty ****)
+// 10. Invoke (Difficulty ****)
 =========================================================================
 var invoke = function(list, methodName) {
 	var result = [];
@@ -154,10 +154,56 @@ var invoke = function(list, methodName) {
 	return result;
 };
 
-// Pluck (Difficulty *****) Be careful about the return value..!!
+// 11. Pluck (Difficulty *****) Be careful about the return value..!!
 =========================================================================
 var pluck = function(list, propertyName) {
 	return _.map(list, function(elem){
 		return elem[propertyName];
 	});
+};
+
+// 12. Shuffle (Difficulty ******) Should revisit to fully understand.
+=========================================================================
+var shuffle = function(list) {
+	var rand;
+	var index = 0;
+	var randomized = [];
+
+	_.each(list, function(elem){
+		rand = Math.floor(Math.random() * index++);
+		randomized[index - 1] = randomized[rand];
+		randomized[rand] = elem;
+	});
+
+	return randomized;
+};
+
+// 13. Size (Difficulty *)
+=========================================================================
+var size = function(list) {
+	if (Array.isArray(list)) {
+		return list.length;
+	} else {
+		var count = 0;
+		for (var key in list) {
+			count++;
+		}
+	}
+	return count;
+};
+
+// 14. Partition (Difficulty *)
+=========================================================================
+var partition = function(array, predicate) {
+	var result = [[],[]];
+
+	_.each(array, function(elem){
+		if (predicate(elem)) {
+			result[0].push(elem);
+		} else {
+			result[1].push(elem);
+		}
+	});
+
+	return result;
 };
