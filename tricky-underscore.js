@@ -444,3 +444,66 @@ var range = function(args) {
 =========================================================================
 Function methods
 =========================================================================
+// 1. Throttle (Difficulty ***)
+=========================================================================
+var throttle = function(callback, wait) {
+	var called = false;
+	return function(){
+		if (!called) {
+			called = true;
+			setTimeout(function(){ called = false; }, wait);
+			return callback();
+		} else {
+			return console.log('Wait period has not passed yet.');
+		}
+	};
+};
+
+// 2. Once (Difficulty **)
+=========================================================================
+var once = function(callback) {
+	var called = false;
+	return function(){
+		if (!called) {
+			called = true;
+			return callback();
+		} else {
+			return false;
+		}
+	};
+};
+
+// 3. After (Difficulty **)
+=========================================================================
+var after = function(count, callback) {
+	var innerCount = 0;
+	return function(){
+		if (innerCount < count) {
+			innerCount++;
+		} else {
+			return callback();
+		}
+	};
+};
+
+// 4. Before (Difficulty **)
+=========================================================================
+var before = function(count, callback) {
+	var innerCount = count;
+	return function(){
+		if (count > 0) {
+			count--;
+			return callback();
+		} else {
+			console.log('Maximum call has reached. Ask for a raise.');
+		}
+	};	
+};
+
+// 5. Compose (Difficulty *****)
+=========================================================================
+var compose = function(callback1, callback2) {
+	return function(callback3) {
+		return callback1(callback2(callback3));
+	}
+};
