@@ -1,3 +1,6 @@
+=========================================================================
+Collection methods
+=========================================================================
 // 1. Each (Difficulty **)
 =========================================================================
 var each = function(list, iteratee) {
@@ -207,3 +210,237 @@ var partition = function(array, predicate) {
 
 	return result;
 };
+=========================================================================
+Array methods
+=========================================================================
+// 1. First (Difficulty **) Takes an optional length argument.
+=========================================================================
+var first = function(array) {
+	if (arguments.length < 2) {
+		return array[0];
+	} else {
+		return array.slice(0, arguments[1]);
+	}
+};
+
+// 2. Initial (Difficulty **) Takes an optional length argument.
+=========================================================================
+var initial = function(array) {
+	if (arguments.length < 2) {
+		return array.slice(0, array.length - 1);
+	} else {
+		return array.slice(0, array.length - arguments[1]);
+	}
+};
+
+// 3. Last (Difficulty **) Note on slice handling.
+=========================================================================
+var last = function(array) {
+	if (arguments.length < 2) {
+		return array[array.length - 1];
+	} else {
+		return array.slice(array.length - arguments[1], array.length);
+	}
+};
+
+// 4. Rest (Difficulty *)
+=========================================================================
+var rest = function(array) {
+	if (arguments.length < 2) {
+		return array.slice(1, array.length);
+	} else {
+		return array.slice(arguments[1], array.length);
+	}
+};
+
+// 5. Compact (Difficulty **)
+=========================================================================
+var compact = function(array) {
+	var result = [];
+	
+	_.each(array, function(e){
+		if (!(e == false || e == null || e == 0 || e == "" || e == undefined || e == NaN)) {
+			result.push(e);
+		}
+	});
+	
+	return result;
+};
+
+// 6. Flatten (Difficulty *****) Think about each cases.
+=========================================================================
+var flatten = function flatten(array) {
+	if (arguments[1] === true) { // shallow is true: concat once, and return.
+		return _.reduce(array, function(memo, elem){
+			return memo.concat(elem);
+		}, []);
+	// concat recursively until there's no more nested arrays.
+	} else if (_.some(array, function(e){return Array.isArray(e)})) {
+		return flatten(_.reduce(array, function(memo, elem){
+			return memo.concat(elem);
+		}, []));
+	} else { // finally, return the array.
+		return array;
+	}
+};
+
+// 7. Without (Difficulty *)
+=========================================================================
+var without = function(array) {
+	var values = Array.prototype.slice.call(arguments).slice(1);
+	var output = [];
+
+	_.each(array, function(elem){
+		if (!(_.some(values, function(val){ return elem === val; }))) {
+			output.push(elem);
+		}
+	});
+
+	return output;
+};
+
+// 8. Union (Difficulty *)
+=========================================================================
+var union = function(args) {
+	var arrays = Array.prototype.slice.call(arguments).slice();
+	var output = [];
+
+	var myArr = _.reduce(arrays, function(memo, elem){
+		return memo.concat(elem);
+	});
+
+	_.each(myArr, function(e){
+		if (output.indexOf(e) == -1) {
+			output.push(e);
+		}
+	});
+
+	return output;
+};
+
+// 9. Intersection (Difficulty ******) I do not know this.
+=========================================================================
+var contains = function(list, value) {
+  var result = false;
+  _.each(list, function(elem){
+    if (elem === value) {
+      result = true;
+    }
+  });
+  return result;
+};
+
+var intersection = function(array) {
+  var result = [];
+  var argsLength = arguments.length;
+  for (var i = 0; i < array.length; i++) {
+    var item = array[i];
+    if (_.contains(result, item)) continue;
+    for (var j = 1; j < argsLength; j++) {
+      if (!_.contains(arguments[j], item)) break;
+    }
+    if (j === argsLength) result.push(item);
+  }
+  return result;
+};
+
+// 10. Uniq (Difficulty *)
+=========================================================================
+var uniq = function(array) {
+	var output = [];
+
+	_.each(array, function(elem){
+		if (output.indexOf(elem) == -1) {
+			output.push(elem);
+		}
+	});
+
+	return output;
+};
+
+// 11. IndexOf (Difficulty ***)
+=========================================================================
+var indexOf = function(array, value) {
+	var result = -1;
+
+	_.each(array, function(elem, index){
+		if (elem === value && result === -1) {
+			result = index;
+		}
+	});
+
+	return result;
+};
+
+// 12. Last IndexOf (Difficulty **) Because I used a for loop.
+=========================================================================
+var lastIndexOf = function(array, value) {
+	var result = -1;
+
+	for (var i = array.length - 1; i >= 0; i--) {
+		if (array[i] === value && result === -1) {
+			result = i;
+		}
+	}
+
+	return result;
+};
+
+// 13. Find Index (Difficulty *)
+=========================================================================
+var findIndex = function(array, predicate) {
+	var result = -1;
+
+	_.each(array, function(elem, index){
+		if (predicate(elem) && result === -1) {
+			result = index;
+		}
+	});
+
+	return result;
+};
+
+// 14. Find Last Index (Difficulty *) I used a for loop.
+=========================================================================
+var findLastIndex = function(array, predicate) {
+	var result = -1;
+
+	for (var i = array.length - 1; i >= 0; i--) {
+		if (predicate(array[i]) && result === -1) {
+			result = i;
+		}
+	}
+
+	return result;
+};
+
+// 15. Range (Difficulty ***) Wow! I did it!
+=========================================================================
+var range = function(args) {
+	var result = [];
+
+	if (arguments.length === 1) {
+		for (var i = 0; i < arguments[0]; i++) {
+			result[i] = i;
+		}
+	} else if (arguments.length === 2) {
+		for (var i = arguments[0]; i < arguments[1]; i++) {
+			result.push(i);
+		}
+	} else if (arguments.length === 3) {
+		if (arguments[0] > arguments[1] && 0 > arguments[2]) {
+			for (var i = arguments[0]; i > arguments[1]; i += arguments[2]) {
+				result.push(i);
+			}
+		} else {
+			for (var i = arguments[0]; i < arguments[1]; i += arguments[2]) {
+				result.push(i);
+			}
+		}
+	}
+
+	return result;
+};
+=========================================================================
+Function methods
+=========================================================================
