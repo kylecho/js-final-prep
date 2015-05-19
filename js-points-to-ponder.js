@@ -142,10 +142,22 @@ Q How does #bind make your life simpler when thinking about closures and scopes?
 JavaScript Objects and “Classes” and Prototypes
 ========================================================================================================
 Q Can JS functions be defined inside of objects?
+=>
+
 Q What is a ConstructorFunction?
+=>
+
 Q What is a prototype?
+=> A prototype is a native object for most of the objects that keeps commonly used methods. They are non-enumerable which means loops will
+	 not loop over the property.
+
 Q How do prototypes allow you to inherit and DRY up code?
+=> Any objects that are inherited from an object with a prototype will have a reference to all prototypes, which means these methods are shared.
+	 This means we do not need to create same methods that we already have access from the prototype, for our new object.
+
 Q What happens if you take the prototype of the prototype of the prototype etc. of an object?
+=>
+
 
 
 
@@ -153,27 +165,69 @@ Q What happens if you take the prototype of the prototype of the prototype etc. 
 JavaScript Scope and Closures
 ========================================================================================================
 Q What is this equal to? (not a simple question...)
-Q How do you bind variables to a scope?
-Q Why would you define a that variable?
-Q Why is id naughty to modify or reference variables from outside your scope?
-Q Why aren''t private variables actually private?
-Q Functions should always return the same thing... or..?
-Q How does the way you call a function (e.g. function style, method style...) affect its scope (and this)?
+=> It is a parameter that points to its immediate caller object.
 
+Q How do you bind variables to a scope?
+=> We can declare variables between a function and an inner-function that is returned inside the function to bind the variables.
+
+Q Why would you define a that variable?
+=> We define a that variable, because if this is nested inside an inner-function, that this keyword will point the inner-function instead of
+	 the desired object. So we need to declare that variable with this in a desired scope to point our this to that scope.
+
+Q Why is id naughty to modify or reference variables from outside your scope?
+=>
+
+Q Why aren''t private variables actually private?
+=>
+
+Q Functions should always return the same thing... or..?
+=> A function can return always saome thing or different thing depends on its relationship with its status. If the return value is tied with
+	 a value that is closed in an outer scope of the returned value, it can affect the return value each time it is called.
+
+Q How does the way you call a function (e.g. function style, method style...) affect its scope (and this)?
+=> The way a function is called will determine what scope the this keyword will bind.
 
 
 
 Really Understanding JavaScript Functions
 ========================================================================================================
 Q How do you call a function "method-style"?
+=>
+
 Q How do you call a function "function-style"?
+=>
+
 Q What do #apply and #call do?
+=>
+
 Q When should you use a constructor?
+=>
+
 Q When are arguments for a function required?
+=> There is no arguments that are required for a function. A function can have no argument at all.
+
 Q How can a function take another function as an argument?
+=> A function can take another function as its argument by passing a variable that saved a function, or directly passing an anonymous function.
+
 Q How can a function return another function? How do you then run that returned function?
+=> A function can return another function by placing a function definition as its return value, or returning a variable which saved a function.
+	 We can return a function definition itself as a return value, or we can place a parentheses next to it so that the returned value will be
+	 invoked immediately.
+
 Q How do you indicate an argument isn''t required?
+=>
+
 Q How might you access overflowing (extra) arguments?
+=> We can access overflowing arguments by refering to the arguments object inside the function object.
+
 Q What are surrogates and why are they used?
+=>
+
 Q What does it mean to "namespace" your code?
+=> JavaScript does not have a namespace. However we can simulate it by creating a function for that purpose.
+
 Q How do you namespace your code using modules?
+=> We can place an IIFE and use it as a simulated namespace.
+var Module = (function(){
+	// namespace here.
+}());
