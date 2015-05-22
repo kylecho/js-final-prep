@@ -47,10 +47,10 @@ billName( 'Clinton' ); // "Bill Clinton"
 //For example, wu.compose(f, g, h)(x) is equivalent 
 //to f(g(h(x))).
 =============================================================
-var compose = function(fns) {
-	return function() {
-		return 
-	};
+var compose = function(f, g) {
+  return function(x) {
+    return f(g(x));
+  };
 };
 
 >>> function square(x) { return x * x; }
@@ -120,66 +120,3 @@ _.map(objects, function(object) { // returns an array with applied elements
 //Q
 //last questions from Day6Challenges.js
 ======================================================================
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
