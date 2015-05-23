@@ -174,3 +174,40 @@ var randomAdder = function(times) {
     };
     return resultArr;
   };
+
+
+// 11. Rewrite checkValue using _.each. Make sure that you have underscore.js included where you are running your code.
+==============================================================================================================
+// not working why?
+var checkValue = function(array, value) {
+  _.each(array, function(elem){
+    if (elem === value) {
+      return true;
+    }
+  });
+  return false;
+};
+
+// this works (Noteworthy *****)
+var checkValue = function(array, value) {
+  var result = false;
+  _.each(array, function(elem){
+    if (elem === value) {
+      result = true;
+    }
+  });
+  return result;
+};
+
+// 12. Write a function 'recursiveMultiplier' that takes two arguments, 'arr and num', and multiplies each arr
+// value into by num and returns an array of the values.
+==============================================================================================================
+var recursiveMultiplier = function(arr, num) {
+  return _.map(arr, function(elem){
+    return elem * num;
+  });
+};
+
+// 13. Write a function 'recursiveReverse' that takes an array and uses recursion to return its contents in reverse
+==============================================================================================================
+// to be continued.
