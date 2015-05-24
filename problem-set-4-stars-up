@@ -1,0 +1,321 @@
+Problem Set 1: 4 starts and up
+
+Coderbyte
+
+// 1. Letter Changes (Difficulty ****)
+Replace every letter in the string with the letter following it in the alphabet (ie. c becomes d, z becomes a).
+Then capitalize every vowel in this new string (a, e, i, o, u) and finally return this modified string.
+==============================================================================================================
+var letterChanges = function(str) {
+	var alpha = 'abcdefghijklmnopqrstuvwxyz';
+	var vowel = 'aeiou';
+	var result = '';
+
+	for (var i = 0; i < str.length; i++) {
+		if (str[i].toLowerCase() === 'z') {
+			result += 'A';
+		} else if (alpha.indexOf(str[i]) != -1) { // it is in case of an alphabet
+			if (vowel.indexOf(alpha[alpha.indexOf(str[i]) + 1]) != -1) { // it is a vowel
+				result += alpha[alpha.indexOf(str[i]) + 1].toUpperCase();
+			} else { // it is not a vowel
+				result += alpha[alpha.indexOf(str[i]) + 1];
+			}
+		} else { // it is not an alphabet
+			result += str[i];
+		}
+	}
+
+	return result;
+};
+
+// Time: 14 min
+
+// 2. Array Addition I (Difficulty *****)
+ArrayAdditionI(arr) take the array of numbers stored in arr and return the string true if any combination of 
+numbers in the array can be added up to equal the largest number in the array, otherwise return the string
+false. For example: if arr contains [4, 6, 23, 10, 1, 3] the output should return true because
+4 + 6 + 10 + 3 = 23. The array will not be empty, will not contain all the same elements, and may contain
+negative numbers.
+==============================================================================================================
+var arrayAddition = function(array) {
+	var myArr = array.slice().sort(function(a, b){ return a - b; });
+	var largest = myArr.shift();
+
+	var recursion = function recursion(target, array) {
+		if (array.length === 0) {
+			return target === 0;
+		} else {
+			var deduct = array.shift();
+			return recursion(target - deduct, array) || recursion(target, array);
+		}
+	};
+
+	recursion(largest, myArr);
+};
+
+// Time: 8 min
+
+// 3. Letter Count I (Difficulty ****)
+LetterCountI(str) take the str parameter being passed and return the first word with the greatest number of 
+repeated letters. For example: "Today, is the greatest day ever!" should return greatest because it has 2 e's
+(and 2 t's) and it comes before ever which also has 2 e's. If there are no words with repeating letters
+return -1. Words will be separated by spaces. 
+==============================================================================================================
+
+// 4. Counting Minutes I (Difficulty *****)
+take the str parameter being passed which will be two times (each properly formatted with a colon and am or pm)
+separated by a hyphen and return the total number of minutes between the two times. The time will be in a 12
+hour clock format. For example: if str is 9:00am-10:00am then the output should be 60. If str is 1:00pm-11:00am
+the output should be 1320. 
+==============================================================================================================
+
+// 5. Mean Mode (Difficulty ****)
+take the array of numbers stored in arr and return 1 if the mode equals the mean, 0 if they don't equal each
+other (ie. [5, 3, 3, 3, 1] should return 1 because the mode (3) equals the mean (3)). The array will not be 
+empty, will only contain positive integers, and will not contain more than one mode. 
+==============================================================================================================
+
+// 6. Off Line Minimum (Difficulty ****)
+take the strArr parameter being passed which will be an array of integers ranging from 1...n and the letter
+"E" and return the correct subset based on the following rules. The input will be in the following format: 
+["I","I","E","I",...,"E",...,"I"] where the I's stand for integers and the E means take out the smallest
+integer currently in the whole set. When finished, your program should return that new set with integers
+separated by commas. For example: if strArr is ["5","4","6","E","1","7","E","E","3","2"] then your program
+should return 4,1,5.
+==============================================================================================================
+
+Underscore.js
+
+// 7. Each (Noteworthy *****)
+Iterates over a list of elements, yielding each in turn to an iteratee function. The iteratee is bound to the
+context object, if one is passed. Each invocation of iteratee is called with three arguments:
+(element, index, list). If list is a JavaScript object, iteratee's arguments will be (value, key, list).
+==============================================================================================================
+
+// 8. Reduce (Difficulty *****)
+reduce boils down a list of values into a single value. Memo is the initial state of the reduction, and each
+successive step of it should be returned by iteratee. The iteratee is passed four arguments: the memo, then
+the value and index (or key) of the iteration, and finally a reference to the entire list.
+
+If no memo is passed to the initial invocation of reduce, the iteratee is not invoked on the first element
+of the list. The first element is instead passed as the memo in the invocation of the iteratee on the next 
+element in the list.
+==============================================================================================================
+
+// 9. Find (Difficulty ****)
+Looks through each value in the list, returning the first one that passes a truth test (predicate), or
+undefined if no value passes the test. The function returns as soon as it finds an acceptable element, and
+doesn't traverse the entire list.
+==============================================================================================================
+
+// 10. Invoke (Difficulty ****)
+Calls the method named by methodName on each value in the list. Any extra arguments passed to invoke will be
+forwarded on to the method invocation.
+==============================================================================================================
+
+// 11. Pluck (Difficulty *****)
+A convenient version of what is perhaps the most common use-case for map: extracting a list of property values.
+==============================================================================================================
+
+// 12. Flatten (Difficulty *****)
+Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened
+a single level.
+==============================================================================================================
+
+// 13. Range (Difficulty *****)
+A function to create flexibly-numbered lists of integers, handy for each and map loops. start, if omitted,
+defaults to 0; step defaults to 1. Returns a list of integers from start (inclusive) to stop (exclusive),
+incremented (or decremented) by step, exclusive. Note that ranges that stop before they start are considered
+to be zero-length instead of negative — if you'd like a negative range, use a negative step.
+==============================================================================================================
+
+// 14. Once (Difficulty ****)
+Creates a version of the function that can only be called one time. Repeated calls to the modified function
+will have no effect, returning the value from the original call. Useful for initialization functions, instead
+of having to set a boolean flag and then check it later.
+==============================================================================================================
+
+// 15. Compose (Difficulty *****)
+Returns the composition of a list of functions, where each function consumes the return value of the function
+that follows. In math terms, composing the functions f(), g(), and h() produces f(g(h())).
+==============================================================================================================
+
+Codewars
+
+// 16. Letter Capitalize (Difficulty ****)
+Have the function letterCapitalize(str) take the str parameter being passed and capitalize the first letter of
+each word. Words will be separated by only one space.
+==============================================================================================================
+
+// 17. WeIrD StRiNg CaSe (6 kyu) (Noteworthy ******)
+accepts a string, and returns the same string with all even indexed characters in each word upper cased, and 
+all odd indexed characters in each word lower cased. The indexing just explained is zero based, so the zero-ith 
+index is even, therefore that character should be upper cased.
+
+The passed in string will only consist of alphabetical characters and spaces(' '). Spaces will only be present
+if there are multiple words. Words will be separated by a single space(' ').
+
+Examples:
+toWeirdCase( "String" );//=> returns "StRiNg"
+toWeirdCase( "Weird string case" );//=> returns "WeIrD StRiNg CaSe"
+==============================================================================================================
+
+// 18. Is Prime (6 kyu) (Noteworthy *****)
+Define a function isPrime that takes one integer argument and returns true or false depending on if the integer
+is a prime. A prime number(or a prime) is a natural number greater than 1 that has no positive divisor other
+than 1 and itself.
+==============================================================================================================
+
+// 19. Prime Time (5 kyu) (Noteworthy ******)
+Write a method that takes a maximum bound and returns all primes starting with 0 up-to and including the
+maximum bound.
+
+For example:
+
+prime(11); 
+Should return an array that looks like this:
+[2, 3, 5, 7, 11]
+==============================================================================================================
+
+Eloquent Javascript
+
+// 20. Chess board (Difficulty ****)
+Write a program that creates a string that represents an 8×8 grid, using newline characters to separate lines.
+At each position of the grid there is either a space or a “#” character. The characters should form a chess
+board.
+
+Passing this string to console.log should show something like this:
+
+ # # # #
+# # # #
+ # # # #
+# # # #
+ # # # #
+# # # #
+ # # # #
+# # # #
+==============================================================================================================
+
+// 21. A List (Difficulty *******)
+var list = {
+  value: 1,
+  rest: {
+    value: 2,
+    rest: {
+      value: 3,
+      rest: null
+    }
+  }
+};
+Write a function arrayToList that builds up a data structure like the previous one when given [1, 2, 3] as
+argument, and write a listToArray function that produces an array from a list. Also write the helper functions
+prepend, which takes an element and a list and creates a new list that adds the element to the front of the
+input list, and nth, which takes a list and a number and returns the element at the given position in the list,
+or undefined when there is no such element.
+==============================================================================================================
+
+// 22. Deep comparison (Difficulty *******)
+Write a function, deepEqual, that takes two values and returns true only if they are the same value or are
+objects with the same properties whose values are also equal when compared with a recursive call to deepEqual.
+==============================================================================================================
+
+// 23. Mother-child age difference (Difficulty ******)
+Using the example data set from this chapter, compute the average age difference between mothers and children
+(the age of the mother when the child is born). 
+
+function average(array) {
+  function plus(a, b) { return a + b; }
+  return array.reduce(plus) / array.length;
+}
+
+var byName = {};
+ancestry.forEach(function(person) {
+  byName[person.name] = person;
+});
+
+// Your code here.
+
+// → 31.2
+==============================================================================================================
+
+// 24. Historical life expectancy (Difficulty *******)
+Compute and output the average age of the people in the ancestry data set per century. A person is assigned
+to a century by taking their year of death, dividing it by 100, and rounding it up, as in
+Math.ceil(person.died / 100).
+
+function average(array) {
+  function plus(a, b) { return a + b; }
+  return array.reduce(plus) / array.length;
+}
+
+// Your code here.
+
+// → 16: 43.5
+//   17: 51.2
+//   18: 52.8
+//   19: 54.8
+//   20: 84.7
+//   21: 94
+==============================================================================================================
+
+JS Fundamentals
+
+// 25. Write a function called partial that mimics this (Difficulty *****)
+var fullName = function ( firstName, lastName ) {
+  return firstName + ' ' + lastName;
+};
+
+var partial;
+
+var billName = partial( fullName, 'Bill' );
+
+billName( 'Smith' ); // "Bill Smith"
+billName( 'Clinton' ); // "Bill Clinton"
+==============================================================================================================
+
+// 26. Write a function that will merge the first object into the second object, using _.each. If the property 
+// already exists, on the second object, do not overwrite it. (Noteworthy *****)
+==============================================================================================================
+
+// 27. Merge (Difficulty *****)
+==============================================================================================================
+
+// 28. [EXTRA CREDIT] Why doesn`t the code below work? This is a function that should return an array of
+functions that console.log() each person`s name as a string when invoked. Fiddle with this function and inspect
+how it works, then try to fix it using a closure. Be prepared to explain to a partner how it worked before, and
+how it works now with a closure. (Noteworthy ******)
+var checkAttendanceFunc = function(nameArr){
+    var resultArr = [];
+    for(var i = 0; i < nameArr.length; i++){
+      resultArr.push(function(){ console.log('Is', nameArr[i], 'present?', i)});
+    };
+    return resultArr;
+  };
+==============================================================================================================
+
+// 29. Rewrite checkValue using _.each. Make sure that you have underscore.js included where you are running
+your code.
+==============================================================================================================
+
+Functional Programming in Javascript
+
+// 30. Retrieve id, title, and a 150x200 box art url for every video (Difficulty ******) Create a query that
+selects {id, title, boxart} for every video in the MovieLists.
+==============================================================================================================
+
+Advanced JS
+
+// 31. One possible way to cache the results: (Noteworthy *******)
+==============================================================================================================
+
+// 32. What exactly does context represent?
+==============================================================================================================
+
+// 33. How can we change the context of a function? (Noteworthy *****)
+==============================================================================================================
+
+// 34. Different ways of changing the context: (Noteworthy *****)
+==============================================================================================================
+
+// 35. QUIZ: How can we implement looping with a callback? (Noteworthy *******)
+==============================================================================================================

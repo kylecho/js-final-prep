@@ -414,7 +414,7 @@ var findLastIndex = function(array, predicate) {
 	return result;
 };
 
-// 15. Range (Difficulty ***) Wow! I did it!
+// 15. Range (Difficulty *****) Wow! I did it!
 =========================================================================
 var range = function(args) {
 	var result = [];
@@ -459,7 +459,7 @@ var throttle = function(callback, wait) {
 	};
 };
 
-// 2. Once (Difficulty **)
+// 2. Once (Difficulty ****)
 =========================================================================
 var once = function(callback) {
 	var called = false;
