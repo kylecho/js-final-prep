@@ -10,17 +10,18 @@ var letterChanges = function(str) {
 	var alpha = 'abcdefghijklmnopqrstuvwxyz';
 	var vowel = 'aeiou';
 	var result = '';
+	// myStr = str.toLowerCase().split(''); This part was missing
 
 	for (var i = 0; i < str.length; i++) {
 		if (str[i].toLowerCase() === 'z') {
 			result += 'A';
-		} else if (alpha.indexOf(str[i]) != -1) { // it is in case of an alphabet
-			if (vowel.indexOf(alpha[alpha.indexOf(str[i]) + 1]) != -1) { // it is a vowel
+		} else if (alpha.indexOf(str[i]) != -1) {
+			if (vowel.indexOf(alpha[alpha.indexOf(str[i]) + 1]) != -1) {
 				result += alpha[alpha.indexOf(str[i]) + 1].toUpperCase();
-			} else { // it is not a vowel
+			} else {
 				result += alpha[alpha.indexOf(str[i]) + 1];
 			}
-		} else { // it is not an alphabet
+		} else {
 			result += str[i];
 		}
 	}
@@ -29,6 +30,11 @@ var letterChanges = function(str) {
 };
 
 // Time: 14 min
+// Expected result: letterChanges("Argument goes here") // -> "bshvnfOU hpft Ifsf"
+// Actual result  : letterChanges("Argument goes here") // -> "AshvnfOU hpft Ifsf"
+// Do I know it?: Almost
+// Why was it wrong?:
+
 
 // 2. Array Addition I (Difficulty *****)
 ArrayAdditionI(arr) take the array of numbers stored in arr and return the string true if any combination of 
@@ -38,14 +44,15 @@ false. For example: if arr contains [4, 6, 23, 10, 1, 3] the output should retur
 negative numbers.
 ==============================================================================================================
 var arrayAddition = function(array) {
-	var myArr = array.slice().sort(function(a, b){ return a - b; });
-	var largest = myArr.shift();
+	var myArr = array.slice().sort(function(a, b){ return a - b; }); // adding .pop() will become largest.
+	var largest = myArr.shift(); // this is getting the smallest. 
 
 	var recursion = function recursion(target, array) {
 		if (array.length === 0) {
 			return target === 0;
 		} else {
-			var deduct = array.shift();
+			var deduct = array.shift(); // wrong it should have been -> array[0];
+			// array = array.slice(1); is missing
 			return recursion(target - deduct, array) || recursion(target, array);
 		}
 	};
@@ -54,11 +61,15 @@ var arrayAddition = function(array) {
 };
 
 // Time: 8 min
+// Expected result: arrayAddition([4, 6, 23, 10, 1, 3]) // -> true
+// Actual result  : arrayAddition([4, 6, 23, 10, 1, 3]) // -> undefined
+// Do I know it?: No
+// Why was it wrong?:
 
 // 3. Letter Count I (Difficulty ****)
 LetterCountI(str) take the str parameter being passed and return the first word with the greatest number of 
-repeated letters. For example: "Today, is the greatest day ever!" should return greatest because it has 2 e's
-(and 2 t's) and it comes before ever which also has 2 e's. If there are no words with repeating letters
+repeated letters. For example: "Today, is the greatest day ever!" should return greatest because it has 2 e`s
+(and 2 t`s) and it comes before ever which also has 2 e`s. If there are no words with repeating letters
 return -1. Words will be separated by spaces. 
 ==============================================================================================================
 var letterCount = function(str) {
@@ -68,10 +79,9 @@ var letterCount = function(str) {
 	var count = 0;
 	var words = str.slice().split(' ');
 
-	// looping through each words to look for the maximum repeated words' index
-	for (var i = 0; i < words.length; i++) { // loop through words
-		for (var j = 0; j < words[i].length - 1; j++) { // loop through letters
-			var letters = words[i].split('').sort(); // split current word into letters
+	for (var i = 0; i < words.length; i++) {
+		for (var j = 0; j < words[i].length - 1; j++) {
+			var letters = words[i].split('').sort();
 			if (letters[j] === letters[j + 1]) {
 				count++;
 			}
@@ -86,10 +96,51 @@ var letterCount = function(str) {
 	return maxRepeat === 0 ? result : words[maxIndex];
 };
 
-Time: 13 min
+// Time: 13 min
+// Expected result: letterCount("Today, is the greatest day ever!") // -> "greatest"
+// Actual result  : letterCount("Today, is the greatest day ever!") // -> "ever!"
+// Do I know it?: No
+// Why was it wrong?:
+
+function LetterCountI(str) {
+  
+  // Compare function should be carefully set up.
+  var compare = function(a, b) {
+      if (a < b) {
+          return -1;
+      } else if (a > b) {
+          return 1;
+      } else {
+          return 0;
+      }
+  };
+  
+  var copy = str.split(' ').slice();
+  var myArr = copy.slice();
+  var max = 0;   // Must be initiated with 0
+  var count = 0; // Must be initiated with 0
+  var theIndex;
+  var word;
+
+  for (var i = 0; i < myArr.length; i++) {
+    word = myArr[i].split('').sort(compare);
+    for (var j = 0; j < word.length - 1; j++) {
+      if (word[j] === word[j + 1]) {
+        count++;
+      }
+    }
+    if (count > max) {
+      max = count;
+      theIndex = i;
+      count = 0;
+    }
+  }
+  
+  return (theIndex !== undefined) ? copy[theIndex] : -1;
+}
 
 // 4. Mean Mode (Difficulty ****)
-take the array of numbers stored in arr and return 1 if the mode equals the mean, 0 if they don't equal each
+take the array of numbers stored in arr and return 1 if the mode equals the mean, 0 if they don`t equal each
 other (ie. [5, 3, 3, 3, 1] should return 1 because the mode (3) equals the mean (3)). The array will not be 
 empty, will only contain positive integers, and will not contain more than one mode. 
 ==============================================================================================================
@@ -116,12 +167,40 @@ var meanMode = function(array) {
 	return mean(array) === mode(array) ? 1 : 0;
 };
 
-Time: 9 min
+// Time: 9 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
+
+function MeanMode(arr) {
+  var modeCount = {};
+  var mean;
+  var mode;
+  var sum = 0;
+  var count = 0;
+  
+  for (var i = 0; i < arr.length; i++) {
+    sum += arr[i];
+    modeCount[arr[i]] = modeCount[arr[i]] || 0;
+    modeCount[arr[i]] += 1;
+  }
+  
+  mean = sum / arr.length;
+  for (var key in modeCount) {
+    // most important part
+    if (modeCount[key] > count) {
+      mode = parseInt(key);
+      count = modeCount[key];
+    }
+  }
+  return mean === mode ? 1 : 0;
+}
 
 // 5. Off Line Minimum (Difficulty ****)
 take the strArr parameter being passed which will be an array of integers ranging from 1...n and the letter
 "E" and return the correct subset based on the following rules. The input will be in the following format: 
-["I","I","E","I",...,"E",...,"I"] where the I's stand for integers and the E means take out the smallest
+["I","I","E","I",...,"E",...,"I"] where the I`s stand for integers and the E means take out the smallest
 integer currently in the whole set. When finished, your program should return that new set with integers
 separated by commas. For example: if strArr is ["5","4","6","E","1","7","E","E","3","2"] then your program
 should return 4,1,5.
@@ -143,14 +222,18 @@ var offLineMinimum = function(array) {
 	return result.join(); // ',' will be used for default
 };
 
-Time : 10 min
+// Time : 10 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 Underscore.js
 
 // 6. Each (Noteworthy *****)
 Iterates over a list of elements, yielding each in turn to an iteratee function. The iteratee is bound to the
 context object, if one is passed. Each invocation of iteratee is called with three arguments:
-(element, index, list). If list is a JavaScript object, iteratee's arguments will be (value, key, list).
+(element, index, list). If list is a JavaScript object, iteratee`s arguments will be (value, key, list).
 ==============================================================================================================
 var each = function(list, iteratee) {
 	if (Array.isArray(list)) { // list is array
@@ -164,7 +247,11 @@ var each = function(list, iteratee) {
 	}
 };
 
-Time: 3 min
+// Time: 3 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 7. Reduce (Difficulty *****)
 reduce boils down a list of values into a single value. Memo is the initial state of the reduction, and each
@@ -189,7 +276,11 @@ var reduce = function(list, iteratee, memo) {
 	return memo;
 };
 
-Time: 15 min
+// Time: 15 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // My note: when including parameters inside each, it should also be defined in as its own parameters.
 For example i. Also, always watch the name of original parameters for a function. I.e. list should be list
@@ -207,12 +298,16 @@ var map = function(list, iteratee) {
 	return result;
 };
 
-Time: 2 min
+// Time: 2 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 8. Find (Difficulty ****)
 Looks through each value in the list, returning the first one that passes a truth test (predicate), or
 undefined if no value passes the test. The function returns as soon as it finds an acceptable element, and
-doesn't traverse the entire list.
+doesn`t traverse the entire list.
 ==============================================================================================================
 var find = function(list, predicate) {
 	var result;
@@ -234,7 +329,11 @@ var find = function(list, predicate) {
 	return result;
 };
 
-Time: 2 min
+// Time: 2 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 A potential problem of implementing `find` with `each` is that return elem applies to the anonymous callback,
 not the find function. In other words, what each returns, is not stored anywhere.
@@ -249,7 +348,11 @@ var invoke = function(list, methodName) {
 	});
 };
 
-// ??
+// Time:
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 10. Pluck (Difficulty *****)
 A convenient version of what is perhaps the most common use-case for map: extracting a list of property values.
@@ -262,7 +365,11 @@ var pluck = function(list) {
 	return result;
 };
 
-Time: 4 min
+// Time: 4 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 11. Flatten (Difficulty *****)
 Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened
@@ -282,13 +389,17 @@ var flatten = function flatten(array, shallow) {
 
 };
 
-Time: 11 min
+// Time: 11 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 12. Range (Difficulty *****)
 A function to create flexibly-numbered lists of integers, handy for each and map loops. start, if omitted,
 defaults to 0; step defaults to 1. Returns a list of integers from start (inclusive) to stop (exclusive),
 incremented (or decremented) by step, exclusive. Note that ranges that stop before they start are considered
-to be zero-length instead of negative — if you'd like a negative range, use a negative step.
+to be zero-length instead of negative — if you`d like a negative range, use a negative step.
 ==============================================================================================================
 var range = function(args) {
 	var start;
@@ -325,7 +436,11 @@ var range = function(args) {
 	return result;
 };
 
-Time: 8 min
+// Time: 8 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 13. Once (Difficulty ****)
 Creates a version of the function that can only be called one time. Repeated calls to the modified function
@@ -344,7 +459,11 @@ var once = function(func) {
 	};
 };
 
-Time: 1 min
+// Time: 1 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 14. Compose (Difficulty *****)
 Returns the composition of a list of functions, where each function consumes the return value of the function
@@ -356,7 +475,11 @@ var compose = function(f, g, h) {
 	};
 };
 
-Time: 1 min
+// Time: 1 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 Codewars
 
@@ -376,7 +499,11 @@ var letterCapitalize = function(str) {
 	return words.join(' ');
 };
 
-Time: 5 min
+// Time: 5 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 16. WeIrD StRiNg CaSe (6 kyu) (Noteworthy ******)
 accepts a string, and returns the same string with all even indexed characters in each word upper cased, and 
@@ -406,7 +533,11 @@ var toWeirdCase = function(str) {
 	return words.join(' ');
 };
 
-Time: 4 min
+// Time: 4 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 17. Is Prime (6 kyu) (Noteworthy *****)
 Define a function isPrime that takes one integer argument and returns true or false depending on if the integer
@@ -422,7 +553,11 @@ var isPrime = function(n) {
 	return n >= 2;
 };
 
-Time: 1 min
+// Time: 1 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 18. Prime Time (5 kyu) (Noteworthy ******)
 Write a method that takes a maximum bound and returns all primes starting with 0 up-to and including the
@@ -455,7 +590,11 @@ var primeTime = function(n) {
 	return result;
 };
 
-Time: 2 min
+// Time: 2 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 Eloquent Javascript
 
@@ -501,7 +640,11 @@ var drawChessBoard = function(x, y) {
 	return result;
 };
 
-Time: 6 min
+// Time: 6 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 20. A List (Difficulty *******)
 var list = {
@@ -514,7 +657,6 @@ var list = {
     }
   }
 };
-
 var list = { value: 1, rest: { value: 2, rest: { value: 3, rest: null } } };
 
 Write a function arrayToList that builds up a data structure like the previous one when given [1, 2, 3] as
@@ -531,7 +673,11 @@ var arrayToList = function(array) {
 	return rest;
 };
 
-Time: 4 min
+// Time: 4 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 21. Deep comparison (Difficulty *******)
 Write a function, deepEqual, that takes two values and returns true only if they are the same value or are
@@ -548,6 +694,11 @@ var deepEqual = (obj1, obj2) {
 	return propsInA === PropsInB;
 };
 
+// Time:
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 22. Mother-child age difference (Difficulty ******)
 
@@ -588,7 +739,11 @@ console.log(average(differences));
 
 // → 31.2
 
-Time: 6 min
+// Time: 6 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 ==============================================================================================================
 
@@ -601,8 +756,6 @@ function average(array) {
   function plus(a, b) { return a + b; }
   return array.reduce(plus) / array.length;
 }
-
-// Your code here.
 
 var groupBy = function(array, defineGroup) {
 	var group = {};
@@ -626,6 +779,12 @@ var groupBy = function(array, defineGroup) {
 //   20: 84.7
 //   21: 94
 ==============================================================================================================
+
+// Time:
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 JS Fundamentals
 
@@ -651,7 +810,11 @@ var billName = partial(fullName, 'Bill');
 
 billName('Clinton');
 
-Time: 6 min
+// Time: 6 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 25. Write a function that will merge the first object into the second object, using _.each. If the property 
 // already exists, on the second object, do not overwrite it. (Noteworthy *****)
@@ -675,7 +838,11 @@ var merge = function(obj1, obj2) {
 	return result;
 };
 
-Time: 2 min
+// Time: 2 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 
 // 26. Merge (Difficulty *****)
@@ -715,7 +882,11 @@ var euclid = function(array1, array2) {
 
 };
 
-Time: 4 min
+// Time: 4 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 27. [EXTRA CREDIT] Why doesn`t the code below work? This is a function that should return an array of
 functions that console.log() each person`s name as a string when invoked. Fiddle with this function and inspect
@@ -743,7 +914,11 @@ var checkAttendanceFunc = function(nameArr){
   return resultArr;
 };
 
-Time: 2 min;
+// Time: 2 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 28. Rewrite checkValue using _.each. Make sure that you have underscore.js included where you are running
 your code. checkValue looks for a target value from an array and returns true immediately after it finds the value.
@@ -760,7 +935,11 @@ var checkValue = function(array, value) {
 	return result;
 };
 
-Time: 6 min
+// Time: 6 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 Functional Programming in Javascript
 
@@ -823,7 +1002,11 @@ var boxArts = function(movieLists) {
 
 };
 
-Time: 15 min
+// Time: 15 min
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 Advanced JS
 
@@ -834,6 +1017,12 @@ function add(a, b){
 } 
 assert( add.call(this, 1, 2) == 3, ".call() takes individual arguments" ); 
 assert( add.apply(this, [1, 2]) == 3, ".apply() takes an array of arguments" );
+
+// Time:
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
 
 // 31. QUIZ: How can we implement looping with a callback? (Noteworthy *******)
 ==============================================================================================================
@@ -847,3 +1036,8 @@ loop([0, 1, 2], function(value){
   assert(this instanceof Array, "The context should be the full array."); 
 });
 
+// Time:
+// Expected result: 
+// Actual result  :
+// Do I know it?:
+// Why was it wrong?:
