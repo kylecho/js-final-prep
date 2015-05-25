@@ -61,21 +61,64 @@ repeated letters. For example: "Today, is the greatest day ever!" should return 
 (and 2 t's) and it comes before ever which also has 2 e's. If there are no words with repeating letters
 return -1. Words will be separated by spaces. 
 ==============================================================================================================
+var letterCount = function(str) {
+	var result = -1;
+	var maxRepeat = 0;
+	var maxIndex;
+	var count = 0;
+	var words = str.slice().split(' ');
 
-// 4. Counting Minutes I (Difficulty *****)
-take the str parameter being passed which will be two times (each properly formatted with a colon and am or pm)
-separated by a hyphen and return the total number of minutes between the two times. The time will be in a 12
-hour clock format. For example: if str is 9:00am-10:00am then the output should be 60. If str is 1:00pm-11:00am
-the output should be 1320. 
-==============================================================================================================
+	// looping through each words to look for the maximum repeated words' index
+	for (var i = 0; i < words.length; i++) { // loop through words
+		for (var j = 0; j < words[i].length - 1; j++) { // loop through letters
+			var letters = words[i].split('').sort(); // split current word into letters
+			if (letters[j] === letters[j + 1]) {
+				count++;
+			}
+			if (count > maxRepeat) {
+				maxRepeat = count;
+				maxIndex = i;
+				count = 0;
+			}
+		}
+	}
 
-// 5. Mean Mode (Difficulty ****)
+	return maxRepeat === 0 ? result : words[maxIndex];
+};
+
+Time: 13 min
+
+// 4. Mean Mode (Difficulty ****)
 take the array of numbers stored in arr and return 1 if the mode equals the mean, 0 if they don't equal each
 other (ie. [5, 3, 3, 3, 1] should return 1 because the mode (3) equals the mean (3)). The array will not be 
 empty, will only contain positive integers, and will not contain more than one mode. 
 ==============================================================================================================
+var meanMode = function(array) {
+	var modeCount = {};
 
-// 6. Off Line Minimum (Difficulty ****)
+	var mean = function(array) {
+		return array.reduce(function(a, b){ return a + b; }) / array.length;
+	};
+
+	var mode = function(array){
+		var result = 0;
+		for (var i = 0; i < array.length; i++) {
+			modeCount[i] === undefined ? 1 : modeCount[i]++;
+		}
+		for (var key in modeCount) {
+			if (modeCount[key] > result) {
+				result = modeCount[key];
+			}
+		}
+		return result;
+	};
+
+	return mean(array) === mode(array) ? 1 : 0;
+};
+
+Time: 9 min
+
+// 5. Off Line Minimum (Difficulty ****)
 take the strArr parameter being passed which will be an array of integers ranging from 1...n and the letter
 "E" and return the correct subset based on the following rules. The input will be in the following format: 
 ["I","I","E","I",...,"E",...,"I"] where the I's stand for integers and the E means take out the smallest
@@ -83,16 +126,47 @@ integer currently in the whole set. When finished, your program should return th
 separated by commas. For example: if strArr is ["5","4","6","E","1","7","E","E","3","2"] then your program
 should return 4,1,5.
 ==============================================================================================================
+var offLineMinimum = function(array) {
+	var result = [];
+	var currentArray; // will be used for each iteration to find the lowest number (copy) all elem left to E
+
+	for (var i = 0; i < array.length; i++) {
+		if (array[i] === 'E') {
+			currentArray = array.slice(0, i); // copy for current set
+			result.push(currentArray.sort(function(a, b){ return a - b; })[0]);
+			array.splice(i, 1); // delete 'E'
+			array.splice(array.indexOf(result[result.length - 1]), 1); // delete the number
+			i = i - 2; // correct i for future iterations
+		}
+	}
+
+	return result.join(); // ',' will be used for default
+};
+
+Time : 10 min
 
 Underscore.js
 
-// 7. Each (Noteworthy *****)
+// 6. Each (Noteworthy *****)
 Iterates over a list of elements, yielding each in turn to an iteratee function. The iteratee is bound to the
 context object, if one is passed. Each invocation of iteratee is called with three arguments:
 (element, index, list). If list is a JavaScript object, iteratee's arguments will be (value, key, list).
 ==============================================================================================================
+var each = function(list, iteratee) {
+	if (Array.isArray(list)) { // list is array
+		for (var i = 0; i < list.length; i++) {
+			iteratee(list[i], i, list);
+		}
+	} else if (list.constructor === Object) { // list is object
+		for (var key in list) {
+			iteratee(list[key], key, list);
+		}
+	}
+};
 
-// 8. Reduce (Difficulty *****)
+Time: 3 min
+
+// 7. Reduce (Difficulty *****)
 reduce boils down a list of values into a single value. Memo is the initial state of the reduction, and each
 successive step of it should be returned by iteratee. The iteratee is passed four arguments: the memo, then
 the value and index (or key) of the iteration, and finally a reference to the entire list.
@@ -101,53 +175,210 @@ If no memo is passed to the initial invocation of reduce, the iteratee is not in
 of the list. The first element is instead passed as the memo in the invocation of the iteratee on the next 
 element in the list.
 ==============================================================================================================
+var reduce = function(list, iteratee, memo) {
+	var isMemo = memo; // check for memo's existence
+	each(list, function(elem, i){	// loop over elements in the array
+		if (!isMemo) { // memo not provided: set memo
+			isMemo = true; // memo is now provided
+			memo = elem; // set memo equals elem (which is the first value)
+		} else { // memo provided
+			memo = iteratee(memo, elem, i, list); //1st iteration when memo is initially provided, otherwise 2nd.
+		}
+	});
 
-// 9. Find (Difficulty ****)
+	return memo;
+};
+
+Time: 15 min
+
+// My note: when including parameters inside each, it should also be defined in as its own parameters.
+For example i. Also, always watch the name of original parameters for a function. I.e. list should be list
+all the way, it should not be named array or collection. Silly but important to note.
+
+// 7.5 Map
+==============================================================================================================
+var map = function(list, iteratee) {
+	var result = [];
+	
+	each(list, function(elem, i){
+		result.push(iteratee(elem, i, list));
+	});
+	
+	return result;
+};
+
+Time: 2 min
+
+// 8. Find (Difficulty ****)
 Looks through each value in the list, returning the first one that passes a truth test (predicate), or
 undefined if no value passes the test. The function returns as soon as it finds an acceptable element, and
 doesn't traverse the entire list.
 ==============================================================================================================
+var find = function(list, predicate) {
+	var result;
 
-// 10. Invoke (Difficulty ****)
+	if (Array.isArray(list)) { // list is array
+		for (var i = 0; i < list.length; i++) {
+			if (predicate(list[i])) {
+				return list[i];
+			}
+		}
+	} else if (list.constructor === Object) { // list is object
+		for (var key in list) {
+			if (predicate(list[key])) {
+				return list[key];
+			}
+		}
+	}
+
+	return result;
+};
+
+Time: 2 min
+
+A potential problem of implementing `find` with `each` is that return elem applies to the anonymous callback,
+not the find function. In other words, what each returns, is not stored anywhere.
+
+// 9. Invoke (Difficulty ****)
 Calls the method named by methodName on each value in the list. Any extra arguments passed to invoke will be
 forwarded on to the method invocation.
 ==============================================================================================================
+var invoke = function(list, methodName) {
+	_.each(list, function(value){
+		value[methodName];
+	});
+};
 
-// 11. Pluck (Difficulty *****)
+// ??
+
+// 10. Pluck (Difficulty *****)
 A convenient version of what is perhaps the most common use-case for map: extracting a list of property values.
 ==============================================================================================================
+var pluck = function(list) {
+	var result = [];
+	each(list, function(elem, i){
+		result.push(i);
+	});
+	return result;
+};
 
-// 12. Flatten (Difficulty *****)
+Time: 4 min
+
+// 11. Flatten (Difficulty *****)
 Flattens a nested array (the nesting can be to any depth). If you pass shallow, the array will only be flattened
 a single level.
 ==============================================================================================================
+var flatten = function flatten(array, shallow) {
+	
+	if (shallow === true) {
+		return _.reduce(array, function(memo, elem){ return memo.concat(elem); }, []);
+	}
 
-// 13. Range (Difficulty *****)
+	if (!(_.some(array, function(e){ return Array.isArray(e); }))) {
+		return array;
+	} else {
+		return flatten(_.reduce(array, function(memo, elem){ return memo.concat(elem); }, []));
+	}
+
+};
+
+Time: 11 min
+
+// 12. Range (Difficulty *****)
 A function to create flexibly-numbered lists of integers, handy for each and map loops. start, if omitted,
 defaults to 0; step defaults to 1. Returns a list of integers from start (inclusive) to stop (exclusive),
 incremented (or decremented) by step, exclusive. Note that ranges that stop before they start are considered
 to be zero-length instead of negative — if you'd like a negative range, use a negative step.
 ==============================================================================================================
+var range = function(args) {
+	var start;
+	var stop;
+	var step;
+	var result = [];
 
-// 14. Once (Difficulty ****)
+	if (arguments.length === 1) {
+		start = 0;
+		stop = arguments[0];
+		step = 1;
+	} else if (arguments.length === 2) {
+		if (start > stop) {
+			return result;
+		} else {
+			start = arguments[0];
+			stop = arguments[1];
+			step = 1;
+		}
+	} else if (arguments.length === 3) {
+		if (start > stop) {
+			return result;
+		} else {
+			start = arguments[0];
+			stop = arguments[1];
+			step = arguments[2];
+		}
+	}
+
+	for (var i = start; i < stop; i += step) {
+		result.push(i);
+	}
+
+	return result;
+};
+
+Time: 8 min
+
+// 13. Once (Difficulty ****)
 Creates a version of the function that can only be called one time. Repeated calls to the modified function
 will have no effect, returning the value from the original call. Useful for initialization functions, instead
 of having to set a boolean flag and then check it later.
 ==============================================================================================================
+var once = function(func) {
+	var called = false;
+	return function(){
+		if (!called) {
+			called = true;
+			return func();
+		} else {
+			return false;
+		}
+	};
+};
 
-// 15. Compose (Difficulty *****)
+Time: 1 min
+
+// 14. Compose (Difficulty *****)
 Returns the composition of a list of functions, where each function consumes the return value of the function
 that follows. In math terms, composing the functions f(), g(), and h() produces f(g(h())).
 ==============================================================================================================
+var compose = function(f, g, h) {
+	return function(x){
+		return f(g(h(x)));
+	};
+};
+
+Time: 1 min
 
 Codewars
 
-// 16. Letter Capitalize (Difficulty ****)
+// 15. Letter Capitalize (Difficulty ****)
 Have the function letterCapitalize(str) take the str parameter being passed and capitalize the first letter of
 each word. Words will be separated by only one space.
 ==============================================================================================================
+var letterCapitalize = function(str) {
+	var words = str.split(' ');
 
-// 17. WeIrD StRiNg CaSe (6 kyu) (Noteworthy ******)
+	for (var i = 0; i < words.length; i++) {
+		words[i] = words[i].split('');
+		words[i][0] = words[i][0].toUpperCase();
+		words[i] = words[i].join('');
+	}
+
+	return words.join(' ');
+};
+
+Time: 5 min
+
+// 16. WeIrD StRiNg CaSe (6 kyu) (Noteworthy ******)
 accepts a string, and returns the same string with all even indexed characters in each word upper cased, and 
 all odd indexed characters in each word lower cased. The indexing just explained is zero based, so the zero-ith 
 index is even, therefore that character should be upper cased.
@@ -159,14 +390,41 @@ Examples:
 toWeirdCase( "String" );//=> returns "StRiNg"
 toWeirdCase( "Weird string case" );//=> returns "WeIrD StRiNg CaSe"
 ==============================================================================================================
+var toWeirdCase = function(str) {
+	var words = str.split(' ');
 
-// 18. Is Prime (6 kyu) (Noteworthy *****)
+	for (var i = 0; i < words.length; i++) {
+		words[i] = words[i].split('');
+		for (var j = 0; j < words[i].length; j++) {
+			if (j % 2 !== 0) {
+				words[i][j] = words[i][j].toUpperCase();
+			}
+		}
+		words[i] = words[i].join('');
+	}
+
+	return words.join(' ');
+};
+
+Time: 4 min
+
+// 17. Is Prime (6 kyu) (Noteworthy *****)
 Define a function isPrime that takes one integer argument and returns true or false depending on if the integer
 is a prime. A prime number(or a prime) is a natural number greater than 1 that has no positive divisor other
 than 1 and itself.
 ==============================================================================================================
+var isPrime = function(n) {
+	for (var i = 2; i < n; i++) {
+		if (n % i === 0) {
+			return false;
+		}
+	}
+	return n >= 2;
+};
 
-// 19. Prime Time (5 kyu) (Noteworthy ******)
+Time: 1 min
+
+// 18. Prime Time (5 kyu) (Noteworthy ******)
 Write a method that takes a maximum bound and returns all primes starting with 0 up-to and including the
 maximum bound.
 
@@ -176,10 +434,32 @@ prime(11);
 Should return an array that looks like this:
 [2, 3, 5, 7, 11]
 ==============================================================================================================
+var primeTime = function(n) {
+	var isPrime = function(n) {
+		for (var i = 2; i < n; i++) {
+			if (n % i === 0) { // Be super careful not to confuse with n % 2
+				return false;
+			}
+		}
+		return n >= 2;
+	};
+
+	var result = [];
+
+	for (var i = 0; i <= n; i++) {
+		if (isPrime(i)) {
+			result.push(i);
+		}
+	}
+
+	return result;
+};
+
+Time: 2 min
 
 Eloquent Javascript
 
-// 20. Chess board (Difficulty ****)
+// 19. Chess board (Difficulty ****)
 Write a program that creates a string that represents an 8×8 grid, using newline characters to separate lines.
 At each position of the grid there is either a space or a “#” character. The characters should form a chess
 board.
@@ -195,8 +475,35 @@ Passing this string to console.log should show something like this:
  # # # #
 # # # #
 ==============================================================================================================
+var drawChessBoard = function(x, y) {
+	var oddRow = '';
+	var evenRow = '';
+	var result = '';
 
-// 21. A List (Difficulty *******)
+	for (var i = 1; i <= x; i++) { // make rows
+		if (i % 2 === 0) {
+			oddRow += ' ';
+			evenRow += '#';
+		} else {
+			oddRow += '#';
+			evenRow += ' ';
+		}
+	}
+
+	for (var j = 1; j <= y; j++) { // draw rows
+		if (j % 2 === 0) {
+			result += evenRow + '\n';
+		} else {
+			result += oddRow + '\n';
+		}
+	}
+
+	return result;
+};
+
+Time: 6 min
+
+// 20. A List (Difficulty *******)
 var list = {
   value: 1,
   rest: {
@@ -207,19 +514,54 @@ var list = {
     }
   }
 };
+
+var list = { value: 1, rest: { value: 2, rest: { value: 3, rest: null } } };
+
 Write a function arrayToList that builds up a data structure like the previous one when given [1, 2, 3] as
 argument, and write a listToArray function that produces an array from a list. Also write the helper functions
 prepend, which takes an element and a list and creates a new list that adds the element to the front of the
 input list, and nth, which takes a list and a number and returns the element at the given position in the list,
 or undefined when there is no such element.
 ==============================================================================================================
+var arrayToList = function(array) {
+	var rest = null;
+	for (var i = array.length - 1; i >= 0; i--) {
+		rest = {value: array[i], rest: rest}
+	}
+	return rest;
+};
 
-// 22. Deep comparison (Difficulty *******)
+Time: 4 min
+
+// 21. Deep comparison (Difficulty *******)
 Write a function, deepEqual, that takes two values and returns true only if they are the same value or are
 objects with the same properties whose values are also equal when compared with a recursive call to deepEqual.
 ==============================================================================================================
+var deepEqual = (obj1, obj2) {
+	if (obj1 === obj2) {
+		return true;
+	}
 
-// 23. Mother-child age difference (Difficulty ******)
+	var propsInA;
+	var propsInB;
+
+	return propsInA === PropsInB;
+};
+
+
+// 22. Mother-child age difference (Difficulty ******)
+
+ancestry = [
+{
+	"name"	: "Carolus Haverbeke",
+	"sex"		: "m",
+	"born"	: 1832,
+	"died"	: 1905,
+	"father": "Carel Haverbeke",
+	"mother": "Maria van Brussel"
+}, 
+...];
+
 Using the example data set from this chapter, compute the average age difference between mothers and children
 (the age of the mother when the child is born). 
 
@@ -234,11 +576,23 @@ ancestry.forEach(function(person) {
 });
 
 // Your code here.
+var differences = ancestry.filter(function(person){
+	if (byName[person.mother] !== null) {
+		return person;
+	}
+}).map(function(person){
+	return person.born - byName[person.mother].born;
+});
+
+console.log(average(differences));
 
 // → 31.2
+
+Time: 6 min
+
 ==============================================================================================================
 
-// 24. Historical life expectancy (Difficulty *******)
+// 23. Historical life expectancy (Difficulty *******)
 Compute and output the average age of the people in the ancestry data set per century. A person is assigned
 to a century by taking their year of death, dividing it by 100, and rounding it up, as in
 Math.ceil(person.died / 100).
@@ -250,6 +604,21 @@ function average(array) {
 
 // Your code here.
 
+var groupBy = function(array, defineGroup) {
+	var group = {};
+	var groupName = defineGroup;
+	
+	var makeGroups = function(array) {
+		for (var i = 0; i < array.length; i++) {
+			for (var key in group) {
+				group[groupName]
+			}
+		}
+	};
+
+	return group;
+};
+
 // → 16: 43.5
 //   17: 51.2
 //   18: 52.8
@@ -260,7 +629,7 @@ function average(array) {
 
 JS Fundamentals
 
-// 25. Write a function called partial that mimics this (Difficulty *****)
+// 24. Write a function called partial that mimics this (Difficulty *****)
 var fullName = function ( firstName, lastName ) {
   return firstName + ' ' + lastName;
 };
@@ -272,50 +641,209 @@ var billName = partial( fullName, 'Bill' );
 billName( 'Smith' ); // "Bill Smith"
 billName( 'Clinton' ); // "Bill Clinton"
 ==============================================================================================================
+var partial = function(func, arg1) {
+	return function(arg2) {
+		return func(arg1, arg2);
+	};
+};
 
-// 26. Write a function that will merge the first object into the second object, using _.each. If the property 
+var billName = partial(fullName, 'Bill');
+
+billName('Clinton');
+
+Time: 6 min
+
+// 25. Write a function that will merge the first object into the second object, using _.each. If the property 
 // already exists, on the second object, do not overwrite it. (Noteworthy *****)
 ==============================================================================================================
+var firstObj = {"a": 10, "b": 11, "c": 12, "d": 13, "e": 14};
+var secondObj = {"a": 1, "b": 2, "c": 3};
 
-// 27. Merge (Difficulty *****)
+var merge = function(obj1, obj2) {
+	var result = {};
+
+	for (var key in obj2) {			// needs to do it separately
+		result[key] = obj2[key];
+	}
+
+	for (var key in obj1) {
+		if (!(key in obj2)) {
+			result[key] = obj1[key];
+		}
+	}
+
+	return result;
+};
+
+Time: 2 min
+
+
+// 26. Merge (Difficulty *****)
+Write a function merge. merge should take two arrays and a callback, iterating both elements with the same
+index and map into a new array for result.
+var x = merge([1, 2, 3, 4], [5, 6, 7, 8], function(a, b){  
+  return a + b;
+});
+//x should now equal [6, 8, 10, 12].
+
+Write a function called 'euclid'
+var euclid = function(coords1, coords2){  
+  //Your code here.
+  //You should not use any loops and should
+  //instead use your original merge function.
+}
+var x = euclid([1.2, 3.67], [2.0, 4.4]);
+//x should now equal approximately 1.08.
 ==============================================================================================================
+var merge = function(array1, array2, callback) {
+	var result = [];
 
-// 28. [EXTRA CREDIT] Why doesn`t the code below work? This is a function that should return an array of
+	for (var i = 0; i < array1.length; i++) {
+		result.push(callback(array1[i], array2[i]));
+	}
+
+	return result;
+};
+
+var euclid = function(array1, array2) {
+	
+	var coord = merge(array1, array2, function(a, b){
+		return a - b;
+	});
+
+	return Math.sqrt( Math.pow(coord[0], 2) + Math.pow(coord[1], 2) );
+
+};
+
+Time: 4 min
+
+// 27. [EXTRA CREDIT] Why doesn`t the code below work? This is a function that should return an array of
 functions that console.log() each person`s name as a string when invoked. Fiddle with this function and inspect
 how it works, then try to fix it using a closure. Be prepared to explain to a partner how it worked before, and
 how it works now with a closure. (Noteworthy ******)
 var checkAttendanceFunc = function(nameArr){
-    var resultArr = [];
-    for(var i = 0; i < nameArr.length; i++){
-      resultArr.push(function(){ console.log('Is', nameArr[i], 'present?', i)});
-    };
-    return resultArr;
+  var resultArr = [];
+  for(var i = 0; i < nameArr.length; i++){
+    resultArr.push(function(){ console.log('Is', nameArr[i], 'present?', i)});
   };
+  return resultArr;
+};
 ==============================================================================================================
+var checkAttendanceFunc = function(nameArr){
+  var resultArr = [];
+  
+  var callback = function(nameArr){
+  	console.log('Is', nameArr[i], 'present?', i);
+  	return 'Is ' + nameArr[i] + ' present? ' + i;
+  };
+  
+  for(var i = 0; i < nameArr.length; i++){
+    resultArr.push(callback(nameArr)); // callback should be passed an argument it should also return value
+  };
+  return resultArr;
+};
 
-// 29. Rewrite checkValue using _.each. Make sure that you have underscore.js included where you are running
-your code.
+Time: 2 min;
+
+// 28. Rewrite checkValue using _.each. Make sure that you have underscore.js included where you are running
+your code. checkValue looks for a target value from an array and returns true immediately after it finds the value.
 ==============================================================================================================
+var checkValue = function(array, value) {
+	var result = false;
+
+	_.each(array, function(elem){
+		if (!result && elem === value) {
+			result = true;
+		}
+	});
+
+	return result;
+};
+
+Time: 6 min
 
 Functional Programming in Javascript
 
-// 30. Retrieve id, title, and a 150x200 box art url for every video (Difficulty ******) Create a query that
+// 29. Retrieve id, title, and a 150x200 box art url for every video (Difficulty ******) Create a query that
 selects {id, title, boxart} for every video in the MovieLists.
 ==============================================================================================================
+Array.prototype.concatAll = function() {
+	var results = [];
+	this.forEach(function(subArray) {
+    subArray.forEach(function(element){
+    	results.push(element);
+    });
+  });
+	return results;
+};
+
+var movieLists = [
+			{
+				name: "Instant Queue",
+				videos : [
+					{
+						"id": 70111470,
+						"title": "Die Hard",
+						"boxarts": [
+							{ width: 150, height:200, url:"http://cdn-0.nflximg.com/images/2891/DieHard150.jpg" },
+							{ width: 200, height:200, url:"http://cdn-0.nflximg.com/images/2891/DieHard200.jpg" }
+						],
+						"url": "http://api.netflix.com/catalog/titles/movies/70111470",
+						"rating": 4.0,
+						"bookmark": []
+					},
+					{
+						"id": 654356453,
+						"title": "Bad Boys",
+						"boxarts": [
+							{ width: 200, height:200, url:"http://cdn-0.nflximg.com/images/2891/BadBoys200.jpg" },
+							{ width: 150, height:200, url:"http://cdn-0.nflximg.com/images/2891/BadBoys150.jpg" }
+
+						],
+						"url": "http://api.netflix.com/catalog/titles/movies/70111470",
+						"rating": 5.0,
+						"bookmark": [{ id:432534, time:65876586 }]
+					}
+				]
+			},
+			{/*..another_movie_list..*/}
+		];
+
+var boxArts = function(movieLists) {
+	
+	return movieLists.map(function(list){
+		return list.videos.map(function(video){
+			return video.boxarts;
+		}).filter(function(boxart){
+			return boxart.width === 150;
+		}).map(function(boxart){
+			return {id: video.id, title: video.title, boxart: boxart.url};
+		}).concatAll();
+	}).concatAll();
+
+};
+
+Time: 15 min
 
 Advanced JS
 
-// 31. One possible way to cache the results: (Noteworthy *******)
+// 30. Different ways of changing the context: (Noteworthy *****)
 ==============================================================================================================
+function add(a, b){ 
+  return a + b; 
+} 
+assert( add.call(this, 1, 2) == 3, ".call() takes individual arguments" ); 
+assert( add.apply(this, [1, 2]) == 3, ".apply() takes an array of arguments" );
 
-// 32. What exactly does context represent?
+// 31. QUIZ: How can we implement looping with a callback? (Noteworthy *******)
 ==============================================================================================================
+function loop(array, fn){ 
+  for ( var i = 0; i < array.length; i++ ) 
+    fn.call( array, array[i]); 
+} 
+var num = 0; 
+loop([0, 1, 2], function(value){ 
+  assert(value == num++, "Make sure the contents are as we expect it."); 
+  assert(this instanceof Array, "The context should be the full array."); 
+});
 
-// 33. How can we change the context of a function? (Noteworthy *****)
-==============================================================================================================
-
-// 34. Different ways of changing the context: (Noteworthy *****)
-==============================================================================================================
-
-// 35. QUIZ: How can we implement looping with a callback? (Noteworthy *******)
-==============================================================================================================
