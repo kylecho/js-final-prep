@@ -229,7 +229,7 @@ how it works now with a closure. (Noteworthy ******)
 var checkAttendanceFunc = function(nameArr){
   var resultArr = [];
   for(var i = 0; i < nameArr.length; i++){
-    resultArr.push(function(){ console.log('Is', nameArr[i], 'present?', i)}); // the anonymous function is not invoked.
+    resultArr.push(function(){ console.log('Is', nameArr[i], 'present?', i)}); // this anonymous function is never invoked.
   };
   return resultArr;
 };
@@ -243,7 +243,8 @@ var checkAttendanceFunc = function(nameArr){
   };
   
   for(var i = 0; i < nameArr.length; i++){
-    resultArr.push(callback(nameArr)); // now callback() is invoked and pushed, which effectively close i for each invocation.
+    resultArr.push(callback(nameArr)); // now callback() is invoked and pushed for each iteration, 
+    																	 //which effectively close i for each invocation.
   };
   return resultArr;
 };
@@ -256,8 +257,7 @@ var checkAttendanceFunc = function(nameArr){
 
 
 // 8. Retrieve id, title, and a 150x200 box art url for every video (Difficulty ******) Create a query that
-selects {id, title, boxart} for every video in the MovieLists.
-==============================================================================================================
+// selects {id, title, boxart} for every video in the MovieLists.
 Array.prototype.concatAll = function() {
 	var results = [];
 	this.forEach(function(subArray) {
@@ -298,7 +298,7 @@ var movieLists = [
 				]
 			}
 		];
-
+==============================================================================================================
 var boxArts = function(array) {
 	
 return movieLists.map(function(movieList) { // selecting videos arrays of each movieList object
